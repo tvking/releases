@@ -1,0 +1,12 @@
+[ng\:cloak], [ng-cloak], .ng-cloak { display: none; }
+
+body { padding-top: 50px; }
+
+.release-list a {
+    display:block;
+}
+
+/** angular-ui */
+.nav, .pagination, .carousel, .panel-title a { 
+    cursor: pointer; 
+}

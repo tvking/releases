@@ -1,0 +1,14 @@
+h2 Releases
+div
+  a(
+    class='btn btn-primary btn-block', 
+    href='/release/create'
+  ) 
+    span(class='glyphicon glyphicon-plus') 
+    | &nbsp;Create release &nbsp;
+br
+ul(class='list-group release-list')
+  li(class='list-group-item', ng-repeat='release in releases') 
+    a(href='/release/{{release.$id}}') 
+      {{release.name}}
+
