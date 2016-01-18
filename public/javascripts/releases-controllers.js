@@ -60,16 +60,20 @@
     controllers.controller(
         'ReleaseCreate',
         function($scope, Releases, $window) {
+            var NewRelease = function() {
+                return {
+                    name: '',
+                    releaseDate: new Date().getTime(),
+                    tickets: []
+                };
+            };
             $scope.mode = 'create';
+            $scope.release = new NewRelease();
 
             /** date picker setup */
             $scope.minDate = new Date();
             $scope.dateOptions = {
                 startingDay: 1
-            };
-            $scope.date = new Date().getTime();
-            $scope.release = {
-                releaseDate: (new Date()).getTime()
             };
             $scope.datePickerOpen = false;
             $scope.open = function() {
@@ -80,12 +84,9 @@
                 if (true !== isValid) {
                     return;
                 }
-                var newRelease = {
-                    name: $scope.release.name,
-                    tickets: []
-                };
-                Releases.$add(newRelease)
+                Releases.$add($scope.release)
                         .then(function(ref) {
+                            $scope.release = new NewRelease();
                             var id = ref.key();
                             $window.location.href = '/release/' + ref.key();
                         });

@@ -1,19 +1,18 @@
 h1(ng-show='mode == "create"') Create release
 h1(ng-show='mode == "edit"') Edit "{{release.name}}"
 form(
-  class='form-horizontal', 
+  class='form-horizontal',
   name='create',
   novalidate,
   ng-submit='submit(create.$valid)'
 )
-  {{ release.date }}
   div(class='form-group')
     label(class='control-label col-sm-2') Name
     div(class='col-sm-10')
       input(
-        type='text', 
+        type='text',
         name='name',
-        class='form-control', 
+        class='form-control',
         placeholder='Release name...',
         required,
         ng-model='release.name',
@@ -21,13 +20,13 @@ form(
         ng-maxlength=50
       )
       div(
-        class='help-block', 
+        class='help-block',
         ng-messages='create.releaseName.$error',
         ng-show='create.releaseName.$touched'
       )
         p(ng-message='minlength') Must be at least three characters long
         p(ng-message='maxlength') Must be less than fifty characaters long
-        p(ng-message='required') Required 
+        p(ng-message='required') Required
   div(class='form-group')
     label(class='control-label col-sm-2') Release date
     div(class='col-sm-10')
@@ -36,7 +35,7 @@ form(
           type='text',
           class='form-control',
           uib-datepicker-popup='yyyy-MM-dd',
-          ng-model='date',
+          ng-model='release.releaseDate',
           is-open='datePickerOpen',
           min-date='minDate',
           max-date='maxDate',
