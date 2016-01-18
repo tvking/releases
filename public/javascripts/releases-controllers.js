@@ -17,6 +17,19 @@
     controllers.controller(
         'ReleaseView',
         function($scope, release) {
+            var NewTicket = function() {
+                return {
+                    "ticketId": '',
+                    "description": {
+                        "dev": '',
+                        "customer": ''
+                    },
+                    "diffs": []
+                };
+            };
+
+            $scope.newTicket = new NewTicket();
+
             if ('undefined' === typeof release.tickets) {
                 release.tickets = [];
             }
@@ -29,12 +42,16 @@
 
             $scope.release = release;
             $scope.submit = function(isValid) {
-              if ('undefined' === typeof(release.tickets)) {
-                release.tickets = [];
-              }
-              release.tickets.push($scope.newTicket);
+                if (true !== isValid) {
+                    return;
+                }
+
+                if ('undefined' === typeof(release.tickets)) {
+                    release.tickets = [];
+                }
+                release.tickets.push($scope.newTicket);
                 release.$save();
-                $scope.newTicket = {};
+                $scope.newTicket = new NewTicket();
             };
         }
     );
