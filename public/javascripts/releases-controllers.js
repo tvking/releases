@@ -16,6 +16,16 @@
     controllers.controller(
         'ReleaseView',
         function($scope, release) {
+            if ('undefined' === typeof release.tickets) {
+                release.tickets = [];
+            }
+            var ticketCount = release.tickets.length;
+            for (var i = 0; i < ticketCount; i++) {
+                if ('undefined' === typeof release.tickets[i].diffs) {
+                    release.tickets[i].diffs = [];
+                }
+            }
+
             $scope.release = release;
             $scope.submit = function(isValid) {
               if ('undefined' === typeof(release.tickets)) {

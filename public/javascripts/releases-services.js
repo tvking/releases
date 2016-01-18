@@ -20,13 +20,19 @@
               var deferred = $q.defer();
               releaseRef.once('value', function(snapshot) {
                   if (snapshot.val() !== null) {
-                      deferred.resolve($firebaseObject(releaseRef));
+                      var release = $firebaseObject(releaseRef);
+
+                      release.$loaded().then(function(data) {
+                          deferred.resolve(release);
+                      }, function() {
+                        deferred.resolve(null);
+                      });
                   } else {
                       deferred.resolve(null);
                   }
               });
               return deferred.promise;
-          }
+          };
       }
     ]);
 })();
