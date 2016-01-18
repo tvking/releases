@@ -1,4 +1,5 @@
-(function() {
+/* global window: false */
+(function(angular) {
     "use strict";
     var controllers = angular.module('releaseApp.controllers', [
         'ngMessages',
@@ -66,7 +67,7 @@
             $scope.dateOptions = {
                 startingDay: 1
             };
-            $scope.date = new Date().getTime()
+            $scope.date = new Date().getTime();
             $scope.release = {
                 releaseDate: (new Date()).getTime()
             };
@@ -91,4 +92,4 @@
             };
         }
     );
-})();
+})(window.angular);

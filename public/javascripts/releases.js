@@ -1,4 +1,5 @@
-(function() {
+/* global window: false */
+(function(angular) {
     "use strict";
     var app = angular.module(
         'releaseApp',
@@ -11,4 +12,4 @@
             'firebase',
         ]
     );
-})();
+})(window.angular);

@@ -1,4 +1,5 @@
-(function() {
+/* global window: false */
+(function(angular) {
     "use strict";
 
     var config = angular.module('releaseApp.config', [
@@ -28,7 +29,7 @@
             templateUrl: '/partials/release-view',
             resolve: {
                 release: function(Release, $route) {
-                    return Release($route.current.params.releaseId);
+                    return new Release($route.current.params.releaseId);
                 }
             }
         })
@@ -37,9 +38,9 @@
             templateUrl: '/partials/release-create',
             resolve: {
                 release: function(Release, $route) {
-                    return Release($route.current.params.releaseId);
+                    return new Release($route.current.params.releaseId);
                 }
             }
         });
     });
-})();
+})(window.angular);

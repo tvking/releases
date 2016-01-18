@@ -1,4 +1,5 @@
-(function() {
+/* global window: false */
+(function(angular, Firebase) {
     "use strict";
 
     var services = angular.module('releaseApp.services', [
@@ -35,4 +36,4 @@
           };
       }
     ]);
-})();
+})(window.angular, window.Firebase);
