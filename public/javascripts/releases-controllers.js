@@ -53,6 +53,18 @@
                 release.$save();
                 $scope.newTicket = new NewTicket();
             };
+
+            $scope.addDiff = function(form, owningTicket) {
+                if ('undefined' === typeof owningTicket.diffs) {
+                    owningTicket.diffs = [];
+                }
+                owningTicket.diffs.push({
+                    "diffId": form.diffId
+                });
+                release.$save().then(function() {
+                    form.diffId = '';
+                });
+            };
         }
     );
 
