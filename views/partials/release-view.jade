@@ -1,26 +1,37 @@
 div(ng-show="release")
-  h1 {{release.name}}
-  a(href='/release/{{release.$id}}/edit', class="btn btn-primary") Edit
-  p Release date: {{ release.releaseDate | date:'fullDate'  }}
-  div
-    | Tickets in release: {{release.tickets.length}}
+  div(class='row')
+    div(class='col-sm-10')
+      h1 {{release.name}}
+      p(ng-show='release.releaseDate')
+        Release date: {{ release.releaseDate | date:'fullDate'  }}
+    div(class='col-sm-2')
+      a(href='/release/{{release.$id}}/edit', class="btn btn-primary") Edit Release
   hr
-  button(ng-click='openTicketModal()') Add Ticket
-  div(ng-repeat='ticket in release.tickets')
-    h2
+  div(class='row')
+    div(class='col-sm-2') Tickets in release: {{release.tickets.length}}
+    div(class='col-sm-3')
+      button(ng-click='openTicketModal()') Add Ticket
+  br
+  div(class='row', ng-repeat-start='ticket in release.tickets')
+    div(class='col-sm-1')
       a(href='http://phab.dev.ebuyer.com/{{ticket.ticketId}}') {{ticket.ticketId}}
-    | &nbsp;{{ticket.description.dev}}
-    | &nbsp;{{ticket.owner}}
+    div(class='col-sm-1') Diffs - {{ticket.diffs.length}}
+    div(class='col-sm-3')
+      | &nbsp;{{ticket.description.dev}}
+    div(class='col-sm-1')
+      | &nbsp;{{ticket.owner}}
     br
-    span(ng-show='ticket.description.business') {{ticket.description.business}}
-    h3 Diffs - {{ticket.diffs.length}}
+  div(class='row')
+    div(class='col-sm-3 col-sm-offset-1')
+      span(ng-show='ticket.description.business') {{ticket.description.business}}
+  div(class='row')
     form(
       class='form-horizontal',
       novalidate
       ng-submit='addDiff(this, ticket)'
     )
-      label(class='control-label col-sm-2') Phabricator Diff
-      div(class='col-sm-10')
+      label(class='control-label col-sm-1 col-sm-offset-1') Phab Diff
+      div(class='col-sm-6')
         input(
           type='text',
           class='form-control',
@@ -34,9 +45,12 @@ div(ng-show="release")
         ng-disabled='create.$invalid'
       ) Add Diff
 
-    div(ng-repeat='diff in ticket.diffs')
+  div(class='row', ng-repeat='diff in ticket.diffs')
+    div(class='col-sm-1', ng-if='$first') Diffs
+    div(class='col-sm-2', ng-class="!$first ? 'col-sm-offset-1' : ''")
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
-      |  - {{diff.repo}}
-    hr
+    div(class='col-sm-2')
+      span(ng-show='diff.repo') - {{diff.repo}}
+  hr(ng-repeat-end)
 div(ng-hide="release")
   h1 This release doesn't exist
