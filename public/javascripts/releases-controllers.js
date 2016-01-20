@@ -16,20 +16,7 @@
 
     controllers.controller(
         'ReleaseView',
-        function($scope, release) {
-            var NewTicket = function() {
-                return {
-                    "ticketId": '',
-                    "description": {
-                        "dev": '',
-                        "customer": ''
-                    },
-                    "diffs": []
-                };
-            };
-
-            $scope.newTicket = new NewTicket();
-
+        function($scope, $uibModal, release) {
             if ('undefined' === typeof release.tickets) {
                 release.tickets = [];
             }
@@ -41,32 +28,61 @@
             }
 
             $scope.release = release;
-            $scope.submit = function(isValid) {
-                if (true !== isValid) {
-                    return;
-                }
 
-                if ('undefined' === typeof(release.tickets)) {
-                    release.tickets = [];
-                }
-                release.tickets.push($scope.newTicket);
-                release.$save();
-                $scope.newTicket = new NewTicket();
-            };
+            $scope.openTicketModal = function() {
+                var modalInstance = $uibModal.open({
+                    controller: 'ReleaseTicketAdd',
+                    templateUrl: 'add-ticket.html',
+                    resolve: {
+                        release: release
+                    }
+                });
 
-            $scope.addDiff = function(form, owningTicket) {
-                if ('undefined' === typeof owningTicket.diffs) {
-                    owningTicket.diffs = [];
-                }
-                owningTicket.diffs.push({
-                    "diffId": form.diffId
-                });
-                release.$save().then(function() {
-                    form.diffId = '';
-                });
             };
         }
     );
+
+    controllers.controller('ReleaseTicketAdd', function($scope, $uibModalInstance, release) {
+        var NewTicket = function() {
+            return {
+                "ticketId": '',
+                "description": {
+                    "dev": '',
+                    "customer": ''
+                },
+                "diffs": []
+            };
+        };
+
+        $scope.newTicket = new NewTicket();
+
+        $scope.submit = function(isValid) {
+
+            if (true !== isValid) {
+                return;
+            }
+
+            if ('undefined' === typeof(release.tickets)) {
+                release.tickets = [];
+            }
+            release.tickets.push($scope.newTicket);
+            release.$save().then(function() {
+                $uibModalInstance.dismiss('success');
+            });
+        };
+
+        //$scope.addDiff = function(form, owningTicket) {
+        //    if ('undefined' === typeof owningTicket.diffs) {
+        //        owningTicket.diffs = [];
+        //    }
+        //    owningTicket.diffs.push({
+        //        "diffId": form.diffId
+        //    });
+        //    $scope.release.$save().then(function() {
+        //        form.diffId = '';
+        //    });
+        //};
+    });
 
     controllers.controller(
         'ReleaseEdit',
