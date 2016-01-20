@@ -32,6 +32,11 @@ div(ng-show="release")
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
     div(class='col-sm-2')
       span(ng-show='diff.repo') - {{diff.repo}}
+    div(class='col-sm-1')
+      button(
+        class='btn btn-warning',
+        ng-click='openRemoveDiffModal(ticket, diff)'
+      ) Remove {{ diff.diffId }}
   div(class='row', ng-show='!ticket.diffs.length')
     div(class='col-sm-1') Diffs
     div(class='col-sm-1')

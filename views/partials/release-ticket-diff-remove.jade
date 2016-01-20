@@ -1,0 +1,12 @@
+div(class='modal-header')
+  h3(class='modal-title') Remove Diff {{diff.diffId}} from {{ ticket.ticketId }}?
+
+div(class='modal-body')
+  p Are you sure?
+div(class='modal-footer')
+  button(
+    type='button',
+    class='btn btn-danger',
+    ng-click='submit()'
+  ) Remove {{diff.diffId}}
+  button(class='btn btn-default', type='button', ng-click='cancel()') Cancel

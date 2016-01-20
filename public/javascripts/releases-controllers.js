@@ -48,6 +48,17 @@
                     }
                 });
             };
+            $scope.openRemoveDiffModal = function(ticket, diff) {
+                var modalInstance = $uibModal.open({
+                    controller: 'ReleaseTicketDiffRemove',
+                    templateUrl: '/partials/release-ticket-diff-remove',
+                    resolve: {
+                        release: release,
+                        ticket: ticket,
+                        diff: diff
+                    }
+                });
+            };
         }
     );
 
@@ -105,6 +116,32 @@
                 ticket.diffs = [];
             }
             ticket.diffs.push($scope.newDiff);
+            release.$save().then(function() {
+                $uibModalInstance.close('success');
+            });
+        };
+
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    });
+
+    controllers.controller('ReleaseTicketDiffRemove', function(
+        $scope,
+        $uibModalInstance,
+        release,
+        ticket,
+        diff
+    ) {
+        $scope.ticket = ticket;
+        $scope.diff = diff;
+        $scope.submit = function() {
+            var index = ticket.diffs.indexOf(diff);
+            if (-1 >= index) {
+                $uibModalInstance.dismiss('missing-diff');
+                return;
+            }
+            ticket.diffs.splice(index, 1);
             release.$save().then(function() {
                 $uibModalInstance.close('success');
             });
