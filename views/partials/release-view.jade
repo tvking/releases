@@ -20,6 +20,11 @@ div(ng-show="release")
       | &nbsp;{{ticket.description.dev}}
     div(class='col-sm-1')
       | &nbsp;{{ticket.owner}}
+    div(class='col-sm-1 col-sm-offset-3')
+      button(
+        class='btn btn-warning',
+        ng-click='openRemoveTicketModal(ticket)'
+      ) Remove {{ ticket.ticketId }}
     br
   div(class='row')
     div(class='col-sm-3 col-sm-offset-1')

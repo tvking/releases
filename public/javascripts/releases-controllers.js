@@ -38,6 +38,16 @@
                     }
                 });
             };
+            $scope.openRemoveTicketModal = function(ticket) {
+                var modalInstance = $uibModal.open({
+                    controller: 'ReleaseTicketRemove',
+                    templateUrl: '/partials/release-ticket-remove',
+                    resolve: {
+                        release: release,
+                        ticket: ticket
+                    }
+                });
+            };
             $scope.openDiffModal = function(ticket) {
                 var modalInstance = $uibModal.open({
                     controller: 'ReleaseTicketDiffAdd',
@@ -85,6 +95,30 @@
                 release.tickets = [];
             }
             release.tickets.push($scope.newTicket);
+            release.$save().then(function() {
+                $uibModalInstance.close('success');
+            });
+        };
+
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    });
+
+    controllers.controller('ReleaseTicketRemove', function(
+        $scope,
+        $uibModalInstance,
+        release,
+        ticket
+    ) {
+        $scope.ticket = ticket;
+        $scope.submit = function() {
+            var index = release.tickets.indexOf(ticket);
+            if (-1 >= index) {
+                $uibModalInstance.dismiss('missing-ticket');
+                return;
+            }
+            release.tickets.splice(index, 1);
             release.$save().then(function() {
                 $uibModalInstance.close('success');
             });
