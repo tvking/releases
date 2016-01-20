@@ -29,15 +29,26 @@
 
             $scope.release = release;
 
+            $scope.addDiff = function(form, owningTicket) {
+                if ('undefined' === typeof owningTicket.diffs) {
+                    owningTicket.diffs = [];
+                }
+                owningTicket.diffs.push({
+                    "diffId": form.diffId
+                });
+                $scope.release.$save().then(function() {
+                    form.diffId = '';
+                });
+            };
+
             $scope.openTicketModal = function() {
                 var modalInstance = $uibModal.open({
                     controller: 'ReleaseTicketAdd',
-                    templateUrl: 'add-ticket.html',
+                    templateUrl: '/partials/release-ticket-add',
                     resolve: {
                         release: release
                     }
                 });
-
             };
         }
     );
@@ -57,7 +68,6 @@
         $scope.newTicket = new NewTicket();
 
         $scope.submit = function(isValid) {
-
             if (true !== isValid) {
                 return;
             }
@@ -67,21 +77,13 @@
             }
             release.tickets.push($scope.newTicket);
             release.$save().then(function() {
-                $uibModalInstance.dismiss('success');
+                $uibModalInstance.close('success');
             });
         };
 
-        //$scope.addDiff = function(form, owningTicket) {
-        //    if ('undefined' === typeof owningTicket.diffs) {
-        //        owningTicket.diffs = [];
-        //    }
-        //    owningTicket.diffs.push({
-        //        "diffId": form.diffId
-        //    });
-        //    $scope.release.$save().then(function() {
-        //        form.diffId = '';
-        //    });
-        //};
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
     });
 
     controllers.controller(
