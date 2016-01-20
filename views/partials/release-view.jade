@@ -24,33 +24,18 @@ div(ng-show="release")
   div(class='row')
     div(class='col-sm-3 col-sm-offset-1')
       span(ng-show='ticket.description.business') {{ticket.description.business}}
-  div(class='row')
-    form(
-      class='form-horizontal',
-      novalidate
-      ng-submit='addDiff(this, ticket)'
-    )
-      label(class='control-label col-sm-1 col-sm-offset-1') Phab Diff
-      div(class='col-sm-6')
-        input(
-          type='text',
-          class='form-control',
-          placeholder='D####',
-          required,
-          ng-model='diffId'
-        )
-      button(
-        type='submit',
-        class='btn btn-default'
-        ng-disabled='create.$invalid'
-      ) Add Diff
-
   div(class='row', ng-repeat='diff in ticket.diffs')
     div(class='col-sm-1', ng-if='$first') Diffs
-    div(class='col-sm-2', ng-class="!$first ? 'col-sm-offset-1' : ''")
+    div(class='col-sm-1', ng-if='$first')
+      button(ng-click='openDiffModal(ticket)') Add diff
+    div(class='col-sm-2', ng-class="!$first ? 'col-sm-offset-2' : ''")
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
     div(class='col-sm-2')
       span(ng-show='diff.repo') - {{diff.repo}}
+  div(class='row', ng-show='!ticket.diffs.length')
+    div(class='col-sm-1') Diffs
+    div(class='col-sm-1')
+      button(ng-click='openDiffModal(ticket)') Add diff
   hr(ng-repeat-end)
 div(ng-hide="release")
   h1 This release doesn't exist

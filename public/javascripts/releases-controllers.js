@@ -29,24 +29,22 @@
 
             $scope.release = release;
 
-            $scope.addDiff = function(form, owningTicket) {
-                if ('undefined' === typeof owningTicket.diffs) {
-                    owningTicket.diffs = [];
-                }
-                owningTicket.diffs.push({
-                    "diffId": form.diffId
-                });
-                $scope.release.$save().then(function() {
-                    form.diffId = '';
-                });
-            };
-
             $scope.openTicketModal = function() {
                 var modalInstance = $uibModal.open({
                     controller: 'ReleaseTicketAdd',
                     templateUrl: '/partials/release-ticket-add',
                     resolve: {
                         release: release
+                    }
+                });
+            };
+            $scope.openDiffModal = function(ticket) {
+                var modalInstance = $uibModal.open({
+                    controller: 'ReleaseTicketDiffAdd',
+                    templateUrl: '/partials/release-ticket-diff-add',
+                    resolve: {
+                        release: release,
+                        ticket: ticket
                     }
                 });
             };
@@ -76,6 +74,37 @@
                 release.tickets = [];
             }
             release.tickets.push($scope.newTicket);
+            release.$save().then(function() {
+                $uibModalInstance.close('success');
+            });
+        };
+
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    });
+
+    controllers.controller( 'ReleaseTicketDiffAdd', function(
+        $scope,
+        $uibModalInstance,
+        release,
+        ticket
+    ) {
+        var NewDiff = function() {
+            return {
+                "diffId": ''
+            };
+        };
+
+        $scope.newDiff = new NewDiff();
+        $scope.submit = function(isValid) {
+            if (true !== isValid) {
+                return;
+            }
+            if ('undefined' === typeof(ticket.diffs)) {
+                ticket.diffs = [];
+            }
+            ticket.diffs.push($scope.newDiff);
             release.$save().then(function() {
                 $uibModalInstance.close('success');
             });
