@@ -10,8 +10,8 @@ div(ng-show="release")
   div(class='row')
     div(class='col-sm-2') Tickets in release: {{release.tickets.length}}
     div(class='col-sm-3')
-      button(ng-click='openTicketModal()') Add Ticket
-  br
+      button(ng-click='openTicketModal()', class='btn btn-default') Add Ticket
+  hr
   div(class='row', ng-repeat-start='ticket in release.tickets')
     div(class='col-sm-1')
       a(href='http://phab.dev.ebuyer.com/{{ticket.ticketId}}') {{ticket.ticketId}}
@@ -27,7 +27,7 @@ div(ng-show="release")
   div(class='row', ng-repeat='diff in ticket.diffs')
     div(class='col-sm-1', ng-if='$first') Diffs
     div(class='col-sm-1', ng-if='$first')
-      button(ng-click='openDiffModal(ticket)') Add diff
+      button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
     div(class='col-sm-2', ng-class="!$first ? 'col-sm-offset-2' : ''")
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
     div(class='col-sm-2')
@@ -35,7 +35,7 @@ div(ng-show="release")
   div(class='row', ng-show='!ticket.diffs.length')
     div(class='col-sm-1') Diffs
     div(class='col-sm-1')
-      button(ng-click='openDiffModal(ticket)') Add diff
+      button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
   hr(ng-repeat-end)
 div(ng-hide="release")
   h1 This release doesn't exist
