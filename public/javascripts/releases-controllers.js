@@ -69,6 +69,10 @@
                     }
                 });
             };
+            $scope.diffReleased = function(diff) {
+                diff.released = true;
+                release.$save();
+            };
         }
     );
 
@@ -80,6 +84,7 @@
                     "dev": '',
                     "customer": ''
                 },
+                "devName": '',
                 "diffs": []
             };
         };
@@ -137,7 +142,8 @@
     ) {
         var NewDiff = function() {
             return {
-                "diffId": ''
+                "diffId": '',
+                "repoName": ''
             };
         };
 

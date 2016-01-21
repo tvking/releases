@@ -19,6 +19,16 @@ div(class='modal-body')
           ng-model='newTicket.ticketId'
         )
     div(class='form-group')
+      label(class='control-label col-sm-2') Developer
+      div(class='col-sm-10')
+        input(
+          type='text',
+          class='form-control',
+          placeholder='Dev name',
+          required,
+          ng-model='newTicket.devName'
+        )
+    div(class='form-group')
       label(class='control-label col-sm-2') Dev Description
       div(class='col-sm-10')
         input(
