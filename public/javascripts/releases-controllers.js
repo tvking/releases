@@ -73,6 +73,18 @@
                 diff.released = true;
                 release.$save();
             };
+            $scope.isTicketReleased = function(ticket) {
+                var ticketCount = ticket.diffs.length;
+                if (!ticketCount) {
+                    return false;
+                }
+                for (var i = 0; i < ticketCount; i++) {
+                    if (!ticket.diffs[i].released) {
+                        return false;
+                    }
+                }
+                return true;
+            };
         }
     );
 
