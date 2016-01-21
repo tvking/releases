@@ -18,6 +18,14 @@ div(class='modal-body')
           required,
           ng-model='newDiff.diffId'
         )
+    div(class='form-group')
+      label(class='control-label col-sm-2') Repo
+      div(class='col-sm-10')
+        select(ng-model='newDiff.repoName', class='form-control', nq-required)
+            option(value='Gen1') Gen 1
+            option(value='Gen2') Gen 2
+            option(value='Neuron') Neuron
+            option(value='Showroom') Showroom
 div(class='modal-footer')
   button(
     type='button',

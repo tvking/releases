@@ -16,11 +16,12 @@ div(ng-show="release")
     div(class='col-sm-1')
       a(href='http://phab.dev.ebuyer.com/{{ticket.ticketId}}') {{ticket.ticketId}}
     div(class='col-sm-1') Diffs - {{ticket.diffs.length}}
-    div(class='col-sm-3')
+    div(class='col-sm-1') {{ticket.devName}}
+    div(class='col-sm-6')
       | &nbsp;{{ticket.description.dev}}
     div(class='col-sm-1')
       | &nbsp;{{ticket.owner}}
-    div(class='col-sm-1 col-sm-offset-3')
+    div(class='col-sm-1 col-sm-offset-1')
       button(
         class='btn btn-warning',
         ng-click='openRemoveTicketModal(ticket)'
@@ -33,12 +34,20 @@ div(ng-show="release")
     div(class='col-sm-1', ng-if='$first') Diffs
     div(class='col-sm-1', ng-if='$first')
       button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
-    div(class='col-sm-2', ng-class="!$first ? 'col-sm-offset-2' : ''")
+    div(class='col-sm-1', ng-class="{'col-sm-offset-2': !$first, 'text-muted': diff.released}")
+      span(ng-show='diff.repoName') {{diff.repoName}}
+    div(class='col-sm-2', ng-class='{"text-muted": diff.released}')
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
-    div(class='col-sm-2')
-      span(ng-show='diff.repo') - {{diff.repo}}
+    div(class='col-sm-1', ng-class='{"text-muted": diff.released}')
+      span(ng-show='diff.released') Released
+      button(
+        ng-show='!diff.released',
+        class='btn btn-default',
+        ng-click='diffReleased(diff)'
+      ) Released
     div(class='col-sm-1')
       button(
+        ng-hide='diff.released',
         class='btn btn-warning',
         ng-click='openRemoveDiffModal(ticket, diff)'
       ) Remove {{ diff.diffId }}
@@ -46,6 +55,7 @@ div(ng-show="release")
     div(class='col-sm-1') Diffs
     div(class='col-sm-1')
       button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
+  br
   hr(ng-repeat-end)
 div(ng-hide="release")
   h1 This release doesn't exist
