@@ -155,6 +155,7 @@
         var NewDiff = function() {
             return {
                 "diffId": '',
+                "released": false,
                 "repoName": ''
             };
         };
