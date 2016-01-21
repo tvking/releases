@@ -10,7 +10,7 @@ div(ng-show="release")
   div(class='row')
     div(class='col-sm-2') Tickets in release: {{release.tickets.length}}
     div(class='col-sm-3')
-      button(ng-click='openTicketModal()', class='btn btn-default') Add Ticket
+      button(ng-click='openTicketModal()', class='btn btn-xs btn-default') Add Ticket
   hr
   div(class='row', ng-repeat-start='ticket in release.tickets')
     div(
@@ -37,7 +37,7 @@ div(ng-show="release")
     div(class='col-sm-1 col-sm-offset-1')
       button(
         ng-hide='isTicketReleased(ticket)',
-        class='btn btn-warning',
+        class='btn btn-xs btn-warning',
         ng-click='openRemoveTicketModal(ticket)'
       ) Remove {{ ticket.ticketId }}
     br
@@ -47,7 +47,7 @@ div(ng-show="release")
   div(class='row', ng-repeat='diff in ticket.diffs')
     div(class='col-sm-1', ng-if='$first') Diffs
     div(class='col-sm-1', ng-if='$first')
-      button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
+      button(ng-click='openDiffModal(ticket)', class='btn btn-xs btn-default') Add Diff
     div(class='col-sm-1', ng-class="{'col-sm-offset-2': !$first, 'text-muted': diff.released}")
       span(ng-show='diff.repoName') {{diff.repoName}}
     div(class='col-sm-2', ng-class='{"text-muted": diff.released}')
@@ -64,24 +64,24 @@ div(ng-show="release")
         span(class='glyphicon glyphicon-remove')
       button(
         ng-show='!diff.released',
-        class='btn btn-default',
+        class='btn btn-xs btn-default',
         ng-click='diffReleased(diff)'
       ) Release
     div(class='col-sm-1', ng-class='{"text-muted": diff.released}')
       button(
         ng-show='diff.released && !diff.rolledBack',
-        class='btn btn-danger',
+        class='btn btn-xs btn-danger',
         ng-click='diffRolledback(diff)'
       ) Rollback?
       button(
         ng-hide='diff.released',
-        class='btn btn-warning',
+        class='btn btn-xs btn-warning',
         ng-click='openRemoveDiffModal(ticket, diff)'
       ) Remove {{ diff.diffId }}
   div(class='row', ng-show='!ticket.diffs.length')
     div(class='col-sm-1') Diffs
     div(class='col-sm-1')
-      button(ng-click='openDiffModal(ticket)', class='btn btn-default') Add Diff
+      button(ng-click='openDiffModal(ticket)', class='btn btn-xs btn-default') Add Diff
   br
   hr(ng-repeat-end)
 div(ng-hide="release")
