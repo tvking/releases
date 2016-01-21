@@ -52,12 +52,16 @@ div(ng-show="release")
       span(ng-show='diff.repoName') {{diff.repoName}}
     div(class='col-sm-2', ng-class='{"text-muted": diff.released}')
       a(href='http://phab.dev.ebuyer.com/{{diff.diffId}}') {{diff.diffId}}
-    div(class='col-sm-1', ng-class='{"text-muted": diff.released && !diff.rolledBack}')
-      span(ng-show='diff.released && !diff.rolledBack') Released
+    div(class='col-sm-2', ng-class='{"text-success": diff.released && !diff.rolledBack}')
+      span(ng-show='diff.released && !diff.rolledBack') 
+        | Released &nbsp;
+        span(class='glyphicon glyphicon-ok')
       span(
         ng-show='diff.released && diff.rolledBack',
         ng-class='{"text-danger": diff.rolledBack}'
-      ) Rolledback
+      ) 
+        | Rolledback &nbsp;
+        span(class='glyphicon glyphicon-remove')
       button(
         ng-show='!diff.released',
         class='btn btn-default',
