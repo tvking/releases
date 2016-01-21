@@ -23,6 +23,7 @@ div(ng-show="release")
       | &nbsp;{{ticket.owner}}
     div(class='col-sm-1 col-sm-offset-1')
       button(
+        ng-hide='isTicketReleased(ticket)',
         class='btn btn-warning',
         ng-click='openRemoveTicketModal(ticket)'
       ) Remove {{ ticket.ticketId }}
