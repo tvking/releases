@@ -85,6 +85,10 @@
                 }
                 return true;
             };
+            $scope.diffRolledback = function(diff) {
+                diff.rolledBack = true;
+                release.$save();
+            };
         }
     );
 
@@ -156,6 +160,7 @@
             return {
                 "diffId": '',
                 "released": false,
+                "rolledBack": false,
                 "repoName": ''
             };
         };
