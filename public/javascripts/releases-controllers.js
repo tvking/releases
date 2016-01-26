@@ -28,6 +28,7 @@
             }
 
             $scope.release = release;
+            $scope.diffsVisible = true;
 
             $scope.openTicketModal = function() {
                 var modalInstance = $uibModal.open({
@@ -88,6 +89,9 @@
             $scope.diffRolledback = function(diff) {
                 diff.rolledBack = true;
                 release.$save();
+            };
+            $scope.toggleDiffs = function() {
+                $scope.diffsVisible = !$scope.diffsVisible;
             };
         }
     );

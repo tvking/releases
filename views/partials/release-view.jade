@@ -1,11 +1,14 @@
 div(ng-show="release")
   div(class='row')
-    div(class='col-sm-10')
+    div(class='col-sm-9')
       h1 {{release.name}}
       p(ng-show='release.releaseDate')
         Release date: {{ release.releaseDate | date:'fullDate'  }}
-    div(class='col-sm-2')
+    div(class='col-sm-1')
       a(href='/release/{{release.$id}}/edit', class="btn btn-primary") Edit Release
+    div(class='col-sm-1 col-sm-offset-1')
+      button(class='btn btn-default', ng-click="toggleDiffs()", ng-hide="diffsVisible") Show diffs
+      button(class='btn btn-default', ng-click="toggleDiffs()", ng-show="diffsVisible") Hide Diffs
   br
   div(class='row')
     div(class='col-sm-2') Tickets in release: {{release.tickets.length}}
@@ -45,7 +48,7 @@ div(ng-show="release")
       div(class='row')
         div(class='col-sm-3 col-sm-offset-1')
           span(ng-show='ticket.description.business') {{ticket.description.business}}
-    div(class='panel-body')
+    div(class='panel-body', ng-show='diffsVisible')
       div(class='row diff-row', ng-repeat='diff in ticket.diffs')
         div(class='col-sm-1', ng-if='$first') Diffs
         div(class='col-sm-1', ng-if='$first')
