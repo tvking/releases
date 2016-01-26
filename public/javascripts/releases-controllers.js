@@ -122,6 +122,7 @@
             if ('undefined' === typeof(release.tickets)) {
                 release.tickets = [];
             }
+            $scope.newTicket.created = Date.now();
             release.tickets.push($scope.newTicket);
             release.$save().then(function() {
                 $uibModalInstance.close('success');
@@ -180,6 +181,7 @@
             if ('undefined' === typeof(ticket.diffs)) {
                 ticket.diffs = [];
             }
+            $scope.newDiff.created = Date.now();
             ticket.diffs.push($scope.newDiff);
             release.$save().then(function() {
                 $uibModalInstance.close('success');
