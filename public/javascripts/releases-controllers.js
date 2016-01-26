@@ -75,6 +75,9 @@
                 release.$save();
             };
             $scope.isTicketReleased = function(ticket) {
+                if ('undefined' === typeof ticket.diffs) {
+                    ticket.diffs = [];
+                }
                 var ticketCount = ticket.diffs.length;
                 if (!ticketCount) {
                     return false;
