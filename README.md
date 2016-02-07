@@ -6,7 +6,7 @@ Update the Firebase url in `public/releases-config.js`
 
 ```
 /** Where the firebase db is */
-config.constant('FirebaseUrl', 'https://tepid-water-1234.firebaseio.com');
+config.constant('FirebaseUrl', 'https://tepid-water-1234.firebaseio.com/');
 ```
 
 If you want to prevent public access to the Firebase DB:
