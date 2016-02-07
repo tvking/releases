@@ -6,8 +6,17 @@
         'firebase'
     ]);
 
-    services.service('Releases', function($firebaseArray, FirebaseUrl) {
+    services.service('Releases', function($firebaseArray, FirebaseUrl, FirebaseSecret) {
         var releasesRef = new Firebase(FirebaseUrl + '/releases');
+
+        if (FirebaseSecret) {
+            releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+                if (error) {
+                    console.log("Login Failed!", error);
+                    return;
+                }
+            });
+        }
         return $firebaseArray(releasesRef);
     });
 
