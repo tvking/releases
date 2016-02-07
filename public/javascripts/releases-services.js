@@ -20,11 +20,21 @@
         return $firebaseArray(releasesRef);
     });
 
-    services.factory('Release', ['$firebaseObject', 'FirebaseUrl', '$q',
-      function($firebaseObject, FirebaseUrl, $q) {
+    services.factory('Release', ['$firebaseObject', 'FirebaseUrl', 'FirebaseSecret', '$q',
+      function($firebaseObject, FirebaseUrl, FirebaseSecret, $q) {
           return function(releaseId) {
               // create a reference to the database node where we will store our data
               var releasesRef = new Firebase(FirebaseUrl + '/releases');
+
+              if (FirebaseSecret) {
+                  releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+                      if (error) {
+                          console.log("Login Failed!", error);
+                          return;
+                      }
+                  });
+              }
+
               var releaseRef = releasesRef.child(releaseId);
 
               var deferred = $q.defer();
