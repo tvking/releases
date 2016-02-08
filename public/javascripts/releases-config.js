@@ -6,9 +6,6 @@
         'ngRoute',
     ]);
 
-    /** Firebase secret */
-    config.constant('FirebaseSecret', false);
-
     /** Prettify urls by removing the # */
     config.config(function($locationProvider) {
         $locationProvider.html5Mode(true);

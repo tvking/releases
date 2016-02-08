@@ -8,7 +8,8 @@
 
     services.service('FirebaseConfig', function() {
         var config = {
-            'url': 'https://sweltering-heat-5768.firebaseio.com'
+            'url': 'https://sweltering-heat-5768.firebaseio.com',
+            'secret': false
         };
         return {
             get: function(key) {
@@ -21,11 +22,12 @@
     });
 
 
-    services.service('Releases', function($firebaseArray, FirebaseConfig, FirebaseSecret) {
+    services.service('Releases', function($firebaseArray, FirebaseConfig) {
         var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
 
-        if (FirebaseSecret) {
-            releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+        var firebaseSecret = FirebaseConfig.get('secret');
+        if (firebaseSecret) {
+            releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
                 if (error) {
                     console.log("Login Failed!", error);
                     return;
@@ -35,14 +37,15 @@
         return $firebaseArray(releasesRef);
     });
 
-    services.factory('Release', ['$firebaseObject', 'FirebaseConfig', 'FirebaseSecret', '$q',
-      function($firebaseObject, FirebaseConfig, FirebaseSecret, $q) {
+    services.factory('Release', ['$firebaseObject', 'FirebaseConfig', '$q',
+      function($firebaseObject, FirebaseConfig, $q) {
           return function(releaseId) {
               // create a reference to the database node where we will store our data
               var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
 
-              if (FirebaseSecret) {
-                  releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+              var firebaseSecret = FirebaseConfig.get('secret');
+              if (firebaseSecret) {
+                  releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
                       if (error) {
                           console.log("Login Failed!", error);
                           return;
