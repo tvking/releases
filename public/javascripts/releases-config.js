@@ -9,6 +9,9 @@
     /** Where the firebase db is */
     config.constant('FirebaseUrl', 'https://sweltering-heat-5768.firebaseio.com');
 
+    /** Firebase secret */
+    config.constant('FirebaseSecret', false);
+
     /** Prettify urls by removing the # */
     config.config(function($locationProvider) {
         $locationProvider.html5Mode(true);
