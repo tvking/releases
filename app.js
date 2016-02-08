@@ -25,6 +25,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/partials/:name', function(req, res) {
   res.render('partials/' + req.params.name);
 });
+
+// pass config back
+app.get('/config', function(req, res) {
+    res.send({
+        'FirebaseUrl': 'https://sweltering-heat-5768.firebaseio.com',
+        'FirebaseSecret': false
+    });
+});
 app.use('*', routes);
 
 // catch 404 and forward to error handler
