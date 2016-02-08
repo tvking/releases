@@ -6,9 +6,6 @@
         'ngRoute',
     ]);
 
-    /** Where the firebase db is */
-    config.constant('FirebaseUrl', 'https://sweltering-heat-5768.firebaseio.com');
-
     /** Firebase secret */
     config.constant('FirebaseSecret', false);
 

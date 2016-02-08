@@ -6,8 +6,23 @@
         'firebase'
     ]);
 
-    services.service('Releases', function($firebaseArray, FirebaseUrl, FirebaseSecret) {
-        var releasesRef = new Firebase(FirebaseUrl + '/releases');
+    services.service('FirebaseConfig', function() {
+        var config = {
+            'url': 'https://sweltering-heat-5768.firebaseio.com'
+        };
+        return {
+            get: function(key) {
+                if (false === config.hasOwnProperty(key)) {
+                    throw "Invalid config key `" + key + "`";
+                }
+                return config[key];
+            }
+        };
+    });
+
+
+    services.service('Releases', function($firebaseArray, FirebaseConfig, FirebaseSecret) {
+        var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
 
         if (FirebaseSecret) {
             releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
@@ -20,11 +35,11 @@
         return $firebaseArray(releasesRef);
     });
 
-    services.factory('Release', ['$firebaseObject', 'FirebaseUrl', 'FirebaseSecret', '$q',
-      function($firebaseObject, FirebaseUrl, FirebaseSecret, $q) {
+    services.factory('Release', ['$firebaseObject', 'FirebaseConfig', 'FirebaseSecret', '$q',
+      function($firebaseObject, FirebaseConfig, FirebaseSecret, $q) {
           return function(releaseId) {
               // create a reference to the database node where we will store our data
-              var releasesRef = new Firebase(FirebaseUrl + '/releases');
+              var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
 
               if (FirebaseSecret) {
                   releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
