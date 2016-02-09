@@ -10,7 +10,9 @@
     controllers.controller(
         'ReleaseList',
         function($scope, Releases) {
-            $scope.releases = Releases;
+            Releases.then(function(releaseList) {
+                $scope.releases = releaseList;
+            });
         }
     );
 

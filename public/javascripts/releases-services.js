@@ -6,35 +6,38 @@
         'firebase'
     ]);
 
-    services.service('FirebaseConfig', function() {
-        var config = {
-            'url': 'https://sweltering-heat-5768.firebaseio.com',
-            'secret': false
-        };
-        return {
-            get: function(key) {
-                if (false === config.hasOwnProperty(key)) {
-                    throw "Invalid config key `" + key + "`";
+    services.service('FirebaseConfig', function($http) {
+        return $http.get('/config').then(function(res) {
+            return {
+                get: function(key) {
+                    if (false === res.data.hasOwnProperty(key)) {
+                        throw "Invalid config key `" + key + "`";
+                    }
+                    return res.data[key];
                 }
-                return config[key];
-            }
-        };
+            };
+        });
     });
 
 
-    services.service('Releases', function($firebaseArray, FirebaseConfig) {
-        var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
-
-        var firebaseSecret = FirebaseConfig.get('secret');
-        if (firebaseSecret) {
-            releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
-                if (error) {
-                    console.log("Login Failed!", error);
+    services.service('Releases', function($q, $firebaseArray, FirebaseConfig) {
+        var deferred = $q.defer();
+        FirebaseConfig.then(function(config) {
+            var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
+            var firebaseSecret = config.get('FirebaseSecret');
+            if (firebaseSecret) {
+                releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
+                    if (error) {
+                        deferred.reject("Login Failed! " + error);
+                    } else {
+                        deferred.resolve($firebaseArray(releasesRef));
+                    }
                     return;
-                }
-            });
-        }
-        return $firebaseArray(releasesRef);
+                });
+            }
+            deferred.resolve($firebaseArray(releasesRef));
+        });
+        return deferred.promise;
     });
 
     services.factory('Release', ['$firebaseObject', 'FirebaseConfig', '$q',
