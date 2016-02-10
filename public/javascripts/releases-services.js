@@ -30,50 +30,63 @@
                     if (error) {
                         deferred.reject("Login Failed! " + error);
                     } else {
-                        deferred.resolve($firebaseArray(releasesRef));
+                        deferred.resolve(releasesRef.orderByChild('releaseDate'));
                     }
-                    return;
                 });
+            } else {
+                deferred.resolve(releasesRef.orderByChild('releaseDate'));
             }
-            deferred.resolve($firebaseArray(releasesRef));
         });
         return deferred.promise;
     });
 
-    services.factory('Release', ['$firebaseObject', 'FirebaseConfig', '$q',
-      function($firebaseObject, FirebaseConfig, $q) {
-          return function(releaseId) {
-              // create a reference to the database node where we will store our data
-              var releasesRef = new Firebase(FirebaseConfig.get('url') + '/releases');
+    services.factory('ReleaseFactory', function($firebaseObject, $firebaseUtils) {
+        return $firebaseObject.$extend({
+            toJSON: function() {
+                return $firebaseUtils.toJSON(
+                    angular.extend({}, this, {
+                        releaseDate: this.releaseDate? this.releaseDate.getTime() : null
+                    })
+                );
+            }
+        });
+    });
 
-              var firebaseSecret = FirebaseConfig.get('secret');
-              if (firebaseSecret) {
-                  releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
-                      if (error) {
-                          console.log("Login Failed!", error);
-                          return;
-                      }
-                  });
-              }
+    services.factory('Release', [
+        'ReleaseFactory', 'FirebaseConfig', '$q',
+        function(ReleaseFactory, FirebaseConfig, $q) {
+            return function(releaseId) {
+                FirebaseConfig.then(function(config) {
+                    // create a reference to the database node where we will store our data
+                    var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
 
-              var releaseRef = releasesRef.child(releaseId);
+                    var firebaseSecret = config.get('FirebaseSecret');
+                    if (firebaseSecret) {
+                        releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
+                            if (error) {
+                                console.log("Login Failed!", error);
+                                return;
+                            }
+                        });
+                    }
 
-              var deferred = $q.defer();
-              releaseRef.once('value', function(snapshot) {
-                  if (snapshot.val() !== null) {
-                      var release = $firebaseObject(releaseRef);
+                    var releaseRef = releasesRef.child(releaseId);
 
-                      release.$loaded().then(function(data) {
-                          deferred.resolve(release);
-                      }, function() {
-                        deferred.resolve(null);
-                      });
-                  } else {
-                      deferred.resolve(null);
-                  }
-              });
-              return deferred.promise;
-          };
-      }
+                    var deferred = $q.defer();
+                    releaseRef.once('value', function(snapshot) {
+                        if (snapshot.val() !== null) {
+                            var release = new ReleaseFactory(releaseRef);
+
+                            release.$loaded().then(function(data) {
+                                deferred.resolve(release);
+                            }, function() {
+                                deferred.resolve(null);
+                            });
+                        }
+                        return deferred.promise;
+                    });
+                });
+            };
+        }
     ]);
 })(window.angular, window.Firebase);
