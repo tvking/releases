@@ -18,7 +18,7 @@
 
     controllers.controller(
         'ReleaseView',
-        function($scope, $uibModal, release) {
+        function($scope,  $window,$uibModal, release) {
             if ('undefined' === typeof release.tickets) {
                 release.tickets = [];
             }
@@ -274,12 +274,14 @@
                 if (true !== isValid) {
                     return;
                 }
-                Releases.$add($scope.release)
-                        .then(function(ref) {
-                            $scope.release = new NewRelease();
-                            var id = ref.key();
-                            $window.location.href = '/release/' + ref.key();
-                        });
+                Releases.then(function(releaseList) {
+                    releaseList.$add($scope.release)
+                            .then(function(ref) {
+                                $scope.release = new NewRelease();
+                                var id = ref.key();
+                                $window.location.href = '/release/' + ref.key();
+                            });
+                });
             };
         }
     );

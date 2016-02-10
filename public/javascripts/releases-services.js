@@ -73,34 +73,36 @@
         function(ReleaseFactory, AppConfig, $q) {
             return function(releaseId) {
                 return AppConfig.then(function(config) {
-                    // create a reference to the database node where we will store our data
-                    var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
+                    var releasesRef    = new Firebase(config.get('FirebaseUrl') + '/releases');
 
                     var firebaseSecret = config.get('FirebaseSecret');
-                    if (firebaseSecret) {
-                        releasesRef.authWithCustomToken(firebaseSecret, function(error, authData) {
-                            if (error) {
-                                console.log("Login Failed!", error);
-                                return;
-                            }
+                    if (!firebaseSecret) {
+                        return $q(function(resolve) {
+                            resolve(releasesRef);
                         });
                     }
 
+                    var promise = releasesRef.authWithCustomToken(firebaseSecret).then(function(error, authData) {
+                        if (!error) {
+                            promise.reject(false);
+                            return;
+                        }
+                        promise.resolve(releasesRef);
+                    });
+                    return promise;
+                }).then(function(releasesRef) {
                     var releaseRef = releasesRef.child(releaseId);
 
-                    var deferred = $q.defer();
-                    releaseRef.once('value', function(snapshot) {
-                        if (snapshot.val() !== null) {
+                    return $q(function(resolve, reject) {
+                        releaseRef.once('value', function(snapshot) {
+                            if (snapshot.val() === null) {
+                                reject(null);
+                                return;
+                            }
                             var release = new ReleaseFactory(releaseRef);
-                            release.$loaded().then(function(data) {
-                                deferred.resolve(release);
-                            }, function() {
-                                deferred.resolve(null);
-                            });
-                        }
+                            resolve(release.$loaded());
+                        });
                     });
-
-                    return deferred.promise;
                 });
             };
         }
