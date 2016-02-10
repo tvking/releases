@@ -6,7 +6,21 @@
         'firebase'
     ]);
 
-    services.service('Releases', function($firebaseArray, FirebaseUrl, FirebaseSecret) {
+
+    services.factory('ReleasesFactory', function($firebaseArray, $firebaseUtils) {
+        return $firebaseArray.$extend({
+                $$added: function() {
+                var self = this;
+                var record = $firebaseArray.prototype.$$added.apply(self, arguments);
+                record.toJSON = function() {
+                    return $firebaseUtils.toJSON(this);
+                };
+                return record;
+            }
+        });
+    });
+
+    services.service('Releases', function(ReleasesFactory, FirebaseUrl, FirebaseSecret) {
         var releasesRef = new Firebase(FirebaseUrl + '/releases');
 
         if (FirebaseSecret) {
@@ -17,7 +31,7 @@
                 }
             });
         }
-        return $firebaseArray(releasesRef.orderByChild('releaseDate'));
+        return new ReleasesFactory(releasesRef.orderByChild('releaseDate'));
     });
 
     services.factory('ReleaseFactory', function($firebaseObject, $firebaseUtils) {
