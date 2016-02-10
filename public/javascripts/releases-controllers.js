@@ -225,6 +225,15 @@
             $scope.mode = 'edit';
             $scope.release = release;
 
+            $scope.minDate = new Date();
+            $scope.dateOptions = {
+                startingDay: 1
+            };
+            $scope.datePickerOpen = false;
+            $scope.open = function() {
+                $scope.datePickerOpen = true;
+            };
+
             $scope.submit = function(isValid) {
                 if (true !== isValid) {
                     return;
