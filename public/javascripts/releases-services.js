@@ -20,39 +20,51 @@
         return $firebaseArray(releasesRef);
     });
 
-    services.factory('Release', ['$firebaseObject', 'FirebaseUrl', 'FirebaseSecret', '$q',
-      function($firebaseObject, FirebaseUrl, FirebaseSecret, $q) {
-          return function(releaseId) {
-              // create a reference to the database node where we will store our data
-              var releasesRef = new Firebase(FirebaseUrl + '/releases');
+    services.factory('ReleaseFactory', function($firebaseObject, $firebaseUtils) {
+        return $firebaseObject.$extend({
+            toJSON: function() {
+                return $firebaseUtils.toJSON(
+                    angular.extend({}, this, {
+                        releaseDate: this.releaseDate? this.releaseDate.getTime() : null
+                    })
+                );
+            }
+        });
+    });
 
-              if (FirebaseSecret) {
-                  releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
-                      if (error) {
-                          console.log("Login Failed!", error);
-                          return;
-                      }
-                  });
-              }
+    services.factory('Release', ['ReleaseFactory', 'FirebaseUrl', 'FirebaseSecret', '$q',
+        function(ReleaseFactory, FirebaseUrl, FirebaseSecret, $q) {
+            return function(releaseId) {
+                // create a reference to the database node where we will store our data
+                var releasesRef = new Firebase(FirebaseUrl + '/releases');
 
-              var releaseRef = releasesRef.child(releaseId);
+                if (FirebaseSecret) {
+                    releasesRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+                        if (error) {
+                            console.log("Login Failed!", error);
+                            return;
+                        }
+                    });
+                }
 
-              var deferred = $q.defer();
-              releaseRef.once('value', function(snapshot) {
-                  if (snapshot.val() !== null) {
-                      var release = $firebaseObject(releaseRef);
+                var releaseRef = releasesRef.child(releaseId);
 
-                      release.$loaded().then(function(data) {
-                          deferred.resolve(release);
-                      }, function() {
+                var deferred = $q.defer();
+                releaseRef.once('value', function(snapshot) {
+                    if (snapshot.val() !== null) {
+                        var release = new ReleaseFactory(releaseRef);
+
+                        release.$loaded().then(function(data) {
+                            deferred.resolve(release);
+                        }, function() {
+                            deferred.resolve(null);
+                        });
+                    } else {
                         deferred.resolve(null);
-                      });
-                  } else {
-                      deferred.resolve(null);
-                  }
-              });
-              return deferred.promise;
-          };
-      }
+                    }
+                });
+                return deferred.promise;
+            };
+        }
     ]);
 })(window.angular, window.Firebase);

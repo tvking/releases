@@ -258,7 +258,6 @@
             };
             $scope.mode = 'create';
             $scope.release = new NewRelease();
-
             /** date picker setup */
             $scope.minDate = new Date();
             $scope.dateOptions = {
