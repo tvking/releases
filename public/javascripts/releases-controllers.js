@@ -10,7 +10,6 @@
     controllers.controller(
         'ReleaseList',
         function($scope, Releases) {
-            console.log(Releases);
             Releases.then(function(releaseList) {
                 $scope.releases = releaseList;
             });

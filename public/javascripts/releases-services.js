@@ -19,8 +19,20 @@
         });
     });
 
+    services.factory('ReleasesFactory', function($firebaseArray, $firebaseUtils) {
+        return $firebaseArray.$extend({
+                $$added: function() {
+                    var self = this;
+                    var record = $firebaseArray.prototype.$$added.apply(self, arguments);
+                    record.toJSON = function() {
+                    return $firebaseUtils.toJSON(this);
+                };
+                return record;
+            }
+        });
+    });
 
-    services.service('Releases', function($q, $firebaseArray, FirebaseConfig) {
+    services.service('Releases', function($q, ReleasesFactory, FirebaseConfig) {
         var deferred = $q.defer();
         FirebaseConfig.then(function(config) {
             var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
@@ -30,11 +42,11 @@
                     if (error) {
                         deferred.reject("Login Failed! " + error);
                     } else {
-                        deferred.resolve(releasesRef.orderByChild('releaseDate'));
+                        deferred.resolve(new ReleasesFactory(releasesRef.orderByChild('releaseDate')));
                     }
                 });
             } else {
-                deferred.resolve(releasesRef.orderByChild('releaseDate'));
+                deferred.resolve(new ReleasesFactory(releasesRef.orderByChild('releaseDate')));
             }
         });
         return deferred.promise;
@@ -56,7 +68,7 @@
         'ReleaseFactory', 'FirebaseConfig', '$q',
         function(ReleaseFactory, FirebaseConfig, $q) {
             return function(releaseId) {
-                FirebaseConfig.then(function(config) {
+                return FirebaseConfig.then(function(config) {
                     // create a reference to the database node where we will store our data
                     var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
 
@@ -76,15 +88,15 @@
                     releaseRef.once('value', function(snapshot) {
                         if (snapshot.val() !== null) {
                             var release = new ReleaseFactory(releaseRef);
-
                             release.$loaded().then(function(data) {
                                 deferred.resolve(release);
                             }, function() {
                                 deferred.resolve(null);
                             });
                         }
-                        return deferred.promise;
                     });
+
+                    return deferred.promise;
                 });
             };
         }
