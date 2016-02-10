@@ -17,7 +17,7 @@
                 }
             });
         }
-        return $firebaseArray(releasesRef);
+        return $firebaseArray(releasesRef.orderByChild('releaseDate'));
     });
 
     services.factory('ReleaseFactory', function($firebaseObject, $firebaseUtils) {
