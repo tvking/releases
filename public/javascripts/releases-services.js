@@ -6,16 +6,20 @@
         'firebase'
     ]);
 
-    services.service('FirebaseConfig', function($http) {
-        return $http.get('/config').then(function(res) {
-            return {
-                get: function(key) {
-                    if (false === res.data.hasOwnProperty(key)) {
-                        throw "Invalid config key `" + key + "`";
-                    }
-                    return res.data[key];
+    services.service('AppConfig', function($http) {
+        var appConfig;
+        var config = {
+            get: function(key) {
+                if (false === appConfig.hasOwnProperty(key)) {
+                    throw "Invalid config key `" + key + "`";
                 }
-            };
+                return appConfig[key];
+            }
+        };
+
+        return $http.get('/config').then(function(res) {
+            appConfig = res.data;
+            return config;
         });
     });
 
@@ -32,9 +36,9 @@
         });
     });
 
-    services.service('Releases', function($q, ReleasesFactory, FirebaseConfig) {
+    services.service('Releases', function($q, ReleasesFactory, AppConfig) {
         var deferred = $q.defer();
-        FirebaseConfig.then(function(config) {
+        AppConfig.then(function(config) {
             var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
             var firebaseSecret = config.get('FirebaseSecret');
             if (firebaseSecret) {
@@ -65,10 +69,10 @@
     });
 
     services.factory('Release', [
-        'ReleaseFactory', 'FirebaseConfig', '$q',
-        function(ReleaseFactory, FirebaseConfig, $q) {
+        'ReleaseFactory', 'AppConfig', '$q',
+        function(ReleaseFactory, AppConfig, $q) {
             return function(releaseId) {
-                return FirebaseConfig.then(function(config) {
+                return AppConfig.then(function(config) {
                     // create a reference to the database node where we will store our data
                     var releasesRef = new Firebase(config.get('FirebaseUrl') + '/releases');
 
