@@ -39,7 +39,7 @@
             toJSON: function() {
                 return $firebaseUtils.toJSON(
                     angular.extend({}, this, {
-                        releaseDate: this.releaseDate? this.releaseDate.getTime() : null
+                        releaseDate: ('object' === typeof this.releaseDate) ? this.releaseDate.getTime() : (this.releaseDate ? this.releaseDate: null)
                     })
                 );
             }
