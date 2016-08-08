@@ -285,4 +285,63 @@
             };
         }
     );
+
+    controllers.controller(
+        'RepositoryList',
+        function($scope, Repositories) {
+            $scope.repos = Repositories;
+        }
+    );
+
+    controllers.controller(
+        'RepositoryView',
+        function($scope, repo) {
+            $scope.repo = repo;
+        }
+    );
+
+
+    controllers.controller(
+        'RepositoryEdit',
+        function($scope, $window, repo) {
+            $scope.mode = 'edit';
+            $scope.repo = repo;
+
+            $scope.submit = function(isValid) {
+                if (true !== isValid) {
+                    return;
+                }
+
+                repo.$save().then(function() {
+                    $window.location.href = '/repo/' + $scope.repo.$id;
+                });
+            };
+        }
+    );
+
+    controllers.controller(
+        'RepositoryCreate',
+        function($scope, Repositories, $window) {
+            var NewRepository = function() {
+                return {
+                    name: '',
+                };
+            };
+            $scope.mode = 'create';
+            $scope.repo = new NewRepository();
+
+            $scope.submit = function(isValid) {
+                if (true !== isValid) {
+                    return;
+                }
+                Repositories.$add($scope.repo)
+                        .then(function(ref) {
+                            $scope.repo = new NewRepository();
+                            var id = ref.key();
+                            $window.location.href = '/repo/' + ref.key();
+                        });
+            };
+        }
+    );
+
 })(window.angular);
