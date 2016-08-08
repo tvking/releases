@@ -162,7 +162,8 @@
         $scope,
         $uibModalInstance,
         release,
-        ticket
+        ticket,
+        Repositories
     ) {
         var NewDiff = function() {
             return {
@@ -172,7 +173,7 @@
                 "repoName": ''
             };
         };
-
+        $scope.repos = Repositories;
         $scope.newDiff = new NewDiff();
         $scope.submit = function(isValid) {
             if (true !== isValid) {

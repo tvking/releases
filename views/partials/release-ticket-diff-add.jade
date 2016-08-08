@@ -22,6 +22,8 @@ div(class='modal-body')
       label(class='control-label col-sm-2') Repo
       div(class='col-sm-10')
         select(ng-model='newDiff.repoName', class='form-control', nq-required)
+            option(ng-repeat='repo in repos.slice()', value='{{repo.name}}') {{repo.name}}
+         //
             option(value='Basket') Basket
             option(value='Broker') Broker
             option(value='DBAbot') DBA bot
