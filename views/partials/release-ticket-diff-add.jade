@@ -23,28 +23,6 @@ div(class='modal-body')
       div(class='col-sm-10')
         select(ng-model='newDiff.repoName', class='form-control', nq-required)
             option(ng-repeat='repo in repos.slice()', value='{{repo.name}}') {{repo.name}}
-         //
-            option(value='Basket') Basket
-            option(value='Broker') Broker
-            option(value='DBAbot') DBA bot
-            option(value='Ebuyer Module') Ebuyer Module
-            option(value='Gen1') Gen 1
-            option(value='Gen2') Gen 2
-            option(value='Imageproc') Imageproc
-            option(value='Internal') Internal
-            option(value='Legacy Gateway') Legacy Gateway
-            option(value='Neuron') Neuron
-            option(value='Payments') Payments
-            option(value='Payment Gateway') Payment Gateway
-            option(value='PC Configurator') PC Configurator
-            option(value='Puppet') Puppet
-            option(value='RPM') RPM
-            option(value='Showroom') Showroom
-            option(value='TimMQ') TimMQ
-            option(value='UKWH') UKWH
-            option(value='Vagrant') Vagrant
-            option(value='Vendor-Advent') Vendor Advent
-            option(value='VMS') VMS
 div(class='modal-footer')
   button(
     type='button',
