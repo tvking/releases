@@ -8,7 +8,7 @@ div
     | &nbsp;Create repo &nbsp;
 br
 ul(class='list-group repo-list')
-  li(class='list-group-item', ng-repeat='repo in repos.slice().reverse()')
+  li(class='list-group-item', ng-repeat='repo in repos.slice()')
     a(href='/repo/{{repo.$id}}')
       {{repo.name}}
 
