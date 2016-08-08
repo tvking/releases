@@ -1,0 +1,8 @@
+div(ng-show="repo")
+  div(class='row')
+    div(class='col-sm-9')
+      h1 {{repo.name}}
+    div(class='col-sm-1')
+      a(href='/repo/{{repo.$id}}/edit', class="btn btn-primary") Edit Repo
+div(ng-hide="repo")
+  h1 This repo doesn't exist

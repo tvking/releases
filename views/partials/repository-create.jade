@@ -1,0 +1,37 @@
+h1(ng-show='mode == "create"') Create repo
+h1(ng-show='mode == "edit"') Edit "{{repo.name}}"
+form(
+  class='form-horizontal',
+  name='create',
+  novalidate,
+  ng-submit='submit(create.$valid)'
+)
+  div(class='form-group')
+    label(class='control-label col-sm-2') Name
+    div(class='col-sm-10')
+      input(
+        type='text',
+        name='name',
+        class='form-control',
+        placeholder='Repo name...',
+        required,
+        ng-model='repo.name',
+        ng-minlength=3,
+        ng-maxlength=50
+      )
+      div(
+        class='help-block',
+        ng-messages='create.repoName.$error',
+        ng-show='create.repoName.$touched'
+      )
+        p(ng-message='minlength') Must be at least three characters long
+        p(ng-message='maxlength') Must be less than fifty characaters long
+        p(ng-message='required') Required
+  div(class='form-group')
+    div(class='col-sm-offset-2 col-sm-10')
+      button(
+        type='submit',
+        class='btn btn-primary btn-block',
+        ng-disabled='create.$invalid'
+      )
+        | Save
