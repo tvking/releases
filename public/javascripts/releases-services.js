@@ -82,4 +82,75 @@
             };
         }
     ]);
+
+    services.factory('RepositoriesFactory', function($firebaseArray, $firebaseUtils) {
+        return $firebaseArray.$extend({
+                $$added: function() {
+                var self = this;
+                var record = $firebaseArray.prototype.$$added.apply(self, arguments);
+                record.toJSON = function() {
+                    return $firebaseUtils.toJSON(this);
+                };
+                return record;
+            }
+        });
+    });
+
+    services.service('Repositories', function(RepositoriesFactory, FirebaseUrl, FirebaseSecret) {
+        var reposRef = new Firebase(FirebaseUrl + '/repos');
+
+        if (FirebaseSecret) {
+            reposRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+                if (error) {
+                    console.log("Login Failed!", error);
+                    return;
+                }
+            });
+        }
+        return new RepositoriesFactory(reposRef.orderByChild('name'));
+    });
+
+    services.factory('RepositoryFactory', function($firebaseObject, $firebaseUtils) {
+        return $firebaseObject.$extend({
+            toJSON: function() {
+                return $firebaseUtils.toJSON(angular.extend({}, this, {}));
+            }
+        });
+    });
+
+    services.factory('Repository', ['RepositoryFactory', 'FirebaseUrl', 'FirebaseSecret', '$q',
+        function(RepositoryFactory, FirebaseUrl, FirebaseSecret, $q) {
+            return function(repoId) {
+                // create a reference to the database node where we will store our data
+                var reposRef = new Firebase(FirebaseUrl + '/repos');
+
+                if (FirebaseSecret) {
+                    reposRef.authWithCustomToken(FirebaseSecret, function(error, authData) {
+                        if (error) {
+                            console.log("Login Failed!", error);
+                            return;
+                        }
+                    });
+                }
+
+                var repoRef = reposRef.child(repoId);
+
+                var deferred = $q.defer();
+                repoRef.once('value', function(snapshot) {
+                    if (snapshot.val() !== null) {
+                        var repo = new RepositoryFactory(repoRef);
+
+                        repo.$loaded().then(function(data) {
+                            deferred.resolve(repo);
+                        }, function() {
+                            deferred.resolve(null);
+                        });
+                    } else {
+                        deferred.resolve(null);
+                    }
+                });
+                return deferred.promise;
+            };
+        }
+    ]);
 })(window.angular, window.Firebase);

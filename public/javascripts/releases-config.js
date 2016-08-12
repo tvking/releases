@@ -44,6 +44,31 @@
                     return new Release($route.current.params.releaseId);
                 }
             }
+        }).when('/repo', {
+            controller: 'RepositoryList',
+            templateUrl: '/partials/repository-list'
+        })
+        .when('/repo/create', {
+            controller: 'RepositoryCreate',
+            templateUrl: '/partials/repository-create'
+        })
+        .when('/repo/:repoId', {
+            controller: 'RepositoryView',
+            templateUrl: '/partials/repository-view',
+            resolve: {
+                repo: function(Repository, $route) {
+                    return new Repository($route.current.params.repoId);
+                }
+            }
+        })
+        .when('/repo/:repoId/edit', {
+            controller: 'RepositoryEdit',
+            templateUrl: '/partials/repository-create',
+            resolve: {
+                repo: function(Repository, $route) {
+                    return new Repository($route.current.params.repoId);
+                }
+            }
         });
     });
 })(window.angular);

@@ -1,0 +1,14 @@
+h2 Repository
+div
+  a(
+    class='btn btn-primary btn-block',
+    href='/repo/create'
+  )
+    span(class='glyphicon glyphicon-plus')
+    | &nbsp;Create repo &nbsp;
+br
+ul(class='list-group repo-list')
+  li(class='list-group-item', ng-repeat='repo in repos.slice()')
+    a(href='/repo/{{repo.$id}}')
+      {{repo.name}}
+
