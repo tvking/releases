@@ -52,7 +52,11 @@ div(ng-show="release")
         div(class='col-sm-3 col-sm-offset-1')
           span(ng-show='ticket.description.business') {{ticket.description.business}}
     div(class='panel-body', ng-show='diffsVisible')
-      div(class='row diff-row', ng-repeat='diff in ticket.diffs')
+      div(
+        class='row diff-row',
+        ng-class="{'alert alert-danger': addedAfterCutOff(diff.created)}",
+        ng-repeat='diff in ticket.diffs'
+      )
         div(class='col-sm-1', ng-if='$first') Diffs
         div(class='col-sm-1', ng-if='$first')
           button(ng-click='openDiffModal(ticket)', class='btn btn-xs btn-default') Add Diff

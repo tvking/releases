@@ -27,6 +27,10 @@
                 }
             }
 
+            $scope.addedAfterCutOff = function(date) {
+                console.log((new Date(date)).getHours() >= 14);
+                return (new Date(date)).getHours() >= 14;
+            };
             var pastCutOff = function() {
                 return (new Date()).getHours() >= 14;
             };
