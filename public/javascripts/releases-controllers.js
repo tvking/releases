@@ -182,7 +182,9 @@
                 "diffId": '',
                 "released": false,
                 "rolledBack": false,
-                "repoName": ''
+                "repoName": '',
+                "requirents": {
+                }
             };
         };
         $scope.repos = Repositories;

@@ -78,7 +78,7 @@ div(ng-show="release")
             class='btn btn-xs btn-default',
             ng-click='diffReleased(diff)'
           ) Release
-        div(class='col-sm-1', ng-class='{"text-muted": diff.released}')
+        div(class='col-sm-2', ng-class='{"text-muted": diff.released}')
           button(
             ng-show='diff.released && !diff.rolledBack',
             class='btn btn-xs btn-danger',
@@ -89,6 +89,45 @@ div(ng-show="release")
             class='btn btn-xs btn-warning',
             ng-click='openRemoveDiffModal(ticket, diff)'
           ) Remove {{ diff.diffId }}
+        div(class='col-sm-1')
+          div(class="dropdown" ng-show="diff.requirements")
+            button(
+              class="btn btn-default dropdown-toggle"
+              type="button"
+              data-toggle="dropdown"
+            ) Requirements
+            ul(class="dropdown-menu")
+              li(ng-show="diff.requirements.supportStaff")
+                a(href="#")
+                  label Support staff:
+                  | &nbsp;
+                  | {{diff.requirements.supportStaff}}
+              li(ng-show="diff.requirements.timeConstraints")
+                a(href="#")
+                  label Time constraints:
+                  | &nbsp;
+                  | {{diff.requirements.timeConstraints}}
+              li(ng-show="diff.requirements.dbaRequired")
+                a(href="#")
+                  label DBA Required
+              li(ng-show="diff.requirements.sysadminRequired")
+                a(href="#")
+                  label Sysadmin Required
+              li(ng-show="diff.requirements.commsRequired")
+                a(href="#")
+                  label Comms Required
+              li(ng-show="diff.requirements.productionConfigs")
+                a(href="#")
+                  label Production Hiera Configs
+              li(ng-show="diff.requirements.unstageable")
+                a(href="#")
+                  label Not testable in staging
+              li(ng-show="diff.requirements.notifyOps")
+                a(href="#")
+                  label Notify Ops
+              li(ng-show="diff.requirements.akamaiClearCache")
+                a(href="#")
+                  label Requires Akamai cache clearing
       div(class='row', ng-show='!ticket.diffs.length')
         div(class='col-sm-1') Diffs
         div(class='col-sm-1')

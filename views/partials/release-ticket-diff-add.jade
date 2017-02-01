@@ -23,6 +23,85 @@ div(class='modal-body')
       div(class='col-sm-10')
         select(ng-model='newDiff.repoName', class='form-control', nq-required)
             option(ng-repeat='repo in repos.slice()', value='{{repo.name}}') {{repo.name}}
+    div(class='form-group')
+      label(class='control-label col-sm-2') Other people required
+      div(class='col-sm-10')
+        input(
+          type='text',
+          class='form-control',
+          ng-model='newDiff.requirements.supportStaff'
+        )
+    div(class='form-group')
+      label(class='control-label col-sm-2') Time constraints
+      div(class='col-sm-10')
+        input(
+          type='text',
+          class='form-control',
+          ng-model='newDiff.requirements.timeConstraints'
+        )
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.dbaRequired'
+          )
+          | DBA Required
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.sysadminRequired'
+          )
+          | Sysadmin Required
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.commsRequired'
+          )
+          | Comms Required
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.productionConfigs'
+          )
+          | Production Configs
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.unstageable'
+          )
+          | Cannot be tested in staging
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.notifyOps'
+          )
+          | Should Ops be notified?
+    div(class='form-group')
+      label(class='control-label checkbox-inline col-sm-2') &nbsp;
+      div(class="checkbox")
+        label
+          input(
+            type='checkbox',
+            ng-model='newDiff.requirements.akamaiClearCache'
+          )
+          | Requires Akamai cache clear
 div(class='modal-footer')
   button(
     type='button',
