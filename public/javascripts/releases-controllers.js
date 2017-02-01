@@ -16,7 +16,7 @@
 
     controllers.controller(
         'ReleaseView',
-        function($scope, $uibModal, release) {
+        function($scope, $uibModal, $timeout, release) {
             if ('undefined' === typeof release.tickets) {
                 release.tickets = [];
             }
@@ -26,6 +26,18 @@
                     release.tickets[i].diffs = [];
                 }
             }
+
+            var pastCutOff = function() {
+                return (new Date()).getHours() >= 14;
+            };
+            var cutOffUpdateInterval = 10 * 1000;
+            var updatePastCutOff = function() {
+                $scope.pastCutOff = pastCutOff();
+                $timeout(updatePastCutOff, cutOffUpdateInterval);
+            };
+
+            $scope.pastCutOff = pastCutOff();
+            $timeout(updatePastCutOff, cutOffUpdateInterval);
 
             $scope.release = release;
             $scope.diffsVisible = true;

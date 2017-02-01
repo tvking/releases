@@ -9,7 +9,9 @@ div(ng-show="release")
     div(class='col-sm-1 col-sm-offset-1')
       button(class='btn btn-default', ng-click="toggleDiffs()", ng-hide="diffsVisible") Show diffs
       button(class='btn btn-default', ng-click="toggleDiffs()", ng-show="diffsVisible") Hide Diffs
-  br
+  div(class='row' ng-show="pastCutOff")
+    div
+      h2(class="alert alert-danger") It's after the cut off!
   div(class='row')
     div(class='col-sm-2') Tickets in release: {{release.tickets.length}}
     div(class='col-sm-3')
