@@ -27,10 +27,26 @@
                 }
             }
 
-            $scope.addedAfterCutOff = function(date) {
-                console.log((new Date(date)).getHours() >= 14);
-                return (new Date(date)).getHours() >= 14;
+            var cutOffDate = new Date(release.releaseDate);
+            cutOffDate.setHours(14, 0, 0); // limit to 14:00
+
+            // Set which day should be used for cut off
+            if ([2, 3, 4, 5, 6].indexOf(cutOffDate.getDay()) >= 0) {
+                // Tuesday -> Saturday uses yesterday
+                cutOffDate.setDate(cutOffDate.getDate() - 1);
+            } else if (cutOffDate.getDay() == 7) {
+                //Sunday uses previous friday
+                cutOffDate.setDate(cutOffDate.getDate() - 2);
+            } else {
+                //Monday uses previous friday
+                cutOffDate.setDate(cutOffDate.getDate() - 3);
+            }
+
+
+            $scope.diffAddedAfterCutOff = function(diffCreatedDate) {
+                return diffCreatedDate >= cutOffDate;
             };
+
             var pastCutOff = function() {
                 return (new Date()).getHours() >= 14;
             };
