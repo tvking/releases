@@ -34,7 +34,7 @@
             if ([2, 3, 4, 5, 6].indexOf(cutOffDate.getDay()) >= 0) {
                 // Tuesday -> Saturday uses yesterday
                 cutOffDate.setDate(cutOffDate.getDate() - 1);
-            } else if (cutOffDate.getDay() == 7) {
+            } else if (cutOffDate.getDay() === 0) {
                 //Sunday uses previous friday
                 cutOffDate.setDate(cutOffDate.getDate() - 2);
             } else {
@@ -48,7 +48,7 @@
             };
 
             var pastCutOff = function() {
-                return (new Date()).getHours() >= 14;
+                return (new Date()) >= cutOffDate;
             };
             var cutOffUpdateInterval = 10 * 1000;
             var updatePastCutOff = function() {
