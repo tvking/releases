@@ -11,6 +11,31 @@
         'ReleaseList',
         function($scope, Releases) {
             $scope.releases = Releases;
+            $scope.unreleasedCount = function (release) {
+                if ("undefined" === typeof release.tickets) {
+                    return 0;
+                }
+                if (release.tickets.length === 0) {
+                    return 0;
+                }
+                return release.tickets.reduce(function(unreleasedCount, ticket) {
+                    if ("undefined" === typeof ticket.diffs) {
+                        return unreleasedCount;
+                    }
+                    if (ticket.diffs.length === 0) {
+                        return unreleasedCount;
+                    }
+                    return unreleasedCount + Array.prototype.reduce.call(ticket.diffs, function (i, diff) {
+                        if ("undefined" === typeof diff.released) {
+                            return i + 1;
+                        }
+                        if (!diff.released) {
+                            return i + 1;
+                        }
+                        return i;
+                    }, 0);
+                }, 0);
+            };
         }
     );
 
