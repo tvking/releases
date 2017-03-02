@@ -228,7 +228,7 @@
                 "released": false,
                 "rolledBack": false,
                 "repoName": '',
-                "requirents": {
+                "requirements": {
                 }
             };
         };
@@ -241,6 +241,14 @@
             if ('undefined' === typeof(ticket.diffs)) {
                 ticket.diffs = [];
             }
+
+            // Remove empty requirements
+            for (var key in $scope.newDiff.requirements) {
+                if (!$scope.newDiff.requirements[key]) {
+                    delete $scope.newDiff.requirements[key];
+                }
+            }
+
             $scope.newDiff.created = Date.now();
             ticket.diffs.push($scope.newDiff);
             release.$save().then(function() {
