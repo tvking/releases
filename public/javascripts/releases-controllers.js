@@ -244,7 +244,8 @@
 
             // Remove empty requirements
             for (var key in $scope.newDiff.requirements) {
-                if (!$scope.newDiff.requirements[key]) {
+                if ($scope.newDiff.requirements.hasOwnProperty(key) &&
+                    !$scope.newDiff.requirements[key]) {
                     delete $scope.newDiff.requirements[key];
                 }
             }
